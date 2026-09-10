@@ -1,3 +1,5 @@
+### [English](./README_EN.md)
+
 # DNSRW
 按无线网络或移动网络重写系统 DNS - LSPosed
 
