@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="rule_modes">
+        <item>不更改</item>
+        <item>自定义</item>
+        <item>使用无线网络默认配置</item>
+        <item>使用移动网络默认配置</item>
+    </string-array>
+    <string-array name="theme_colors">
+        <item>系统</item>
+        <item>藤紫</item>
+        <item>靛蓝</item>
+        <item>青绿</item>
+        <item>暖橙</item>
+    </string-array>
+</resources>
