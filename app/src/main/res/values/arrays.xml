@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="rule_modes">
-        <item>Do not change</item>
-        <item>Custom</item>
-        <item>Use Wi-Fi default configuration</item>
-        <item>Use mobile network default configuration</item>
+        <item>@string/rules_not_change</item>
+        <item>@string/rules_custom</item>
+        <item>@string/rules_wifi_default</item>
+        <item>@string/rules_mobile_default</item>
     </string-array>
     <string-array name="theme_colors">
-        <item>System</item>
-        <item>Wisteria</item>
-        <item>Indigo</item>
-        <item>Teal</item>
-        <item>Orange</item>
+        <item>@string/theme_system</item>
+        <item>@string/theme_wisteria</item>
+        <item>@string/theme_indigo</item>
+        <item>@string/theme_teal</item>
+        <item>@string/theme_orange</item>
     </string-array>
 </resources>

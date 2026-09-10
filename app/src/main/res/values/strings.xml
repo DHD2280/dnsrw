@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string name="app_name">DNSRW</string>
     <string name="app_description">Rewrite system DNS by Wi-Fi or mobile network</string>
     <string name="service_waiting">LSPosed is connecting</string>
@@ -39,4 +40,18 @@
     <string name="manual_wireless_network">Manually enter network name</string>
     <string name="mobile_network">Mobile Network</string>
     <string name="sim_unavailable">This SIM is currently unavailable</string>
+
+    <!-- Rules -->
+    <string name="rules_not_change">Do not change</string>
+    <string name="rules_custom">Custom</string>
+    <string name="rules_wifi_default">Use Wi-Fi default configuration</string>
+    <string name="rules_mobile_default">Use mobile network default configuration</string>
+
+    <!-- Themes -->
+    <string name="theme_system">System</string>
+    <string name="theme_wisteria">Wisteria</string>
+    <string name="theme_indigo">Indigo</string>
+    <string name="theme_teal">Teal</string>
+    <string name="theme_orange">Orange</string>
+
 </resources>
