@@ -218,7 +218,7 @@ public final class MainActivity extends AppCompatActivity {
                         recreate();
                     }
                 })
-                .setNegativeButton(R.string.cancel, null)
+                .setNegativeButton(android.R.string.cancel, null)
                 .show();
     }
 
@@ -479,7 +479,7 @@ public final class MainActivity extends AppCompatActivity {
             new MaterialAlertDialogBuilder(this)
                     .setTitle(R.string.select_wireless_network)
                     .setMessage(R.string.no_seen_wireless)
-                    .setNegativeButton(R.string.cancel, null)
+                    .setNegativeButton(android.R.string.cancel, null)
                     .setPositiveButton(
                             R.string.manual_wireless_network,
                             (dialog, which) -> showManualWirelessRuleDialog()
@@ -507,7 +507,7 @@ public final class MainActivity extends AppCompatActivity {
                         showRuleDialog(true, id, id);
                     }
                 })
-                .setNegativeButton(R.string.cancel, null)
+                .setNegativeButton(android.R.string.cancel, null)
                 .show();
     }
 
@@ -541,7 +541,7 @@ public final class MainActivity extends AppCompatActivity {
                         ids.get(which),
                         seenSims.get(ids.get(which))
                 ))
-                .setNegativeButton(R.string.cancel, null)
+                .setNegativeButton(android.R.string.cancel, null)
                 .show();
     }
 
@@ -622,7 +622,7 @@ public final class MainActivity extends AppCompatActivity {
         AlertDialog dialog = new MaterialAlertDialogBuilder(this)
                 .setTitle(wifi ? title : RuleAdapter.formatMobileLabel(title))
                 .setView(content)
-                .setNegativeButton(R.string.cancel, null)
+                .setNegativeButton(android.R.string.cancel, null)
                 .setPositiveButton(R.string.save, null)
                 .create();
         dialog.setOnShowListener(ignored -> dialog.getButton(AlertDialog.BUTTON_POSITIVE)
@@ -705,7 +705,7 @@ public final class MainActivity extends AppCompatActivity {
                 .setMessage(wifi
                         ? getString(R.string.delete_message, label)
                         : RuleAdapter.formatMobileLabel(getString(R.string.delete_message, label)))
-                .setNegativeButton(R.string.cancel, null)
+                .setNegativeButton(android.R.string.cancel, null)
                 .setPositiveButton(R.string.delete, (dialog, which) -> {
                     if (!captureDefaults()) {
                         return;

@@ -22,7 +22,6 @@
     <string name="add_mobile_rewrite">添加移动网络重写</string>
     <string name="edit">修改</string>
     <string name="delete">删除</string>
-    <string name="cancel">取消</string>
     <string name="save">保存</string>
     <string name="ssid_label">网络名称</string>
     <string name="rule_mode">重写方式</string>
