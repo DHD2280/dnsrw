@@ -41,6 +41,10 @@
     <string name="mobile_network">Mobile Network</string>
     <string name="sim_unavailable">This SIM is currently unavailable</string>
 
+    <!-- Import / Export -->
+    <string name="import_defaults">Import rules</string>
+    <string name="export_defaults">Export rules</string>
+
     <!-- Rules -->
     <string name="rules_not_change">Do not change</string>
     <string name="rules_custom">Custom</string>

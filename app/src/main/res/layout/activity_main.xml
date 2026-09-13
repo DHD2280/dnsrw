@@ -78,6 +78,40 @@
             android:paddingStart="16dp"
             android:paddingEnd="0dp">
 
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/import_defaults"
+                style="?attr/borderlessButtonStyle"
+                android:layout_width="1dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:contentDescription="@string/import_defaults"
+                android:text="@string/import_defaults"
+                android:tooltipText="@string/import_defaults"
+                app:icon="@drawable/ic_import_24" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/export_defaults"
+                style="?attr/borderlessButtonStyle"
+                android:layout_width="1dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:contentDescription="@string/export_defaults"
+                android:text="@string/export_defaults"
+                android:tooltipText="@string/export_defaults"
+                app:icon="@drawable/ic_export_24" />
+
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="16dp"
+            android:paddingEnd="0dp">
+
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"

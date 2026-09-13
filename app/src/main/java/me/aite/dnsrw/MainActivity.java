@@ -16,12 +16,16 @@
 
 package me.aite.dnsrw;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.InputType;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -30,6 +34,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -49,9 +56,16 @@ import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import io.github.libxposed.service.XposedService;
 
@@ -89,6 +103,8 @@ public final class MainActivity extends AppCompatActivity {
     private EditText wifiDefaultDnsSecondary;
     private EditText mobileDefaultDns;
     private EditText mobileDefaultDnsSecondary;
+    private boolean export = true;
+    private MaterialButton importButton, exportButton;
     private MaterialButton saveDefaults;
     private MaterialButton themeButton;
     private MaterialButton aboutButton;
@@ -118,6 +134,8 @@ public final class MainActivity extends AppCompatActivity {
         wifiDefaultDnsSecondary = findViewById(R.id.wifi_default_dns_secondary);
         mobileDefaultDns = findViewById(R.id.mobile_default_dns);
         mobileDefaultDnsSecondary = findViewById(R.id.mobile_default_dns_secondary);
+        importButton = findViewById(R.id.import_defaults);
+        exportButton = findViewById(R.id.export_defaults);
         saveDefaults = findViewById(R.id.save_defaults);
         themeButton = findViewById(R.id.theme_button);
         aboutButton = findViewById(R.id.about_button);
@@ -140,6 +158,9 @@ public final class MainActivity extends AppCompatActivity {
         );
         wifiRuleTouchHelper = attachRuleTouchHelper(wifiRules, wifiRuleAdapter, true);
         simRuleTouchHelper = attachRuleTouchHelper(simRules, simRuleAdapter, false);
+
+        importButton.setOnClickListener(view -> importExportSettings(false));
+        exportButton.setOnClickListener(view -> importExportSettings(true));
 
         saveDefaults.setOnClickListener(view -> {
             if (captureDefaults()) {
@@ -167,6 +188,56 @@ public final class MainActivity extends AppCompatActivity {
                 .build();
         DynamicColors.applyToActivityIfAvailable(this, options);
     }
+
+    private void importExportSettings(boolean export) {
+        Intent fileIntent = new Intent();
+        this.export = export;
+        fileIntent.setAction(export ? Intent.ACTION_CREATE_DOCUMENT : Intent.ACTION_GET_CONTENT);
+        fileIntent.setType("*/*");
+        fileIntent.putExtra(Intent.EXTRA_TITLE, "OxygenCustomizer_Config" + ".bin");
+        mImportExportLauncher.launch(fileIntent);
+    }
+
+    ActivityResultLauncher<Intent> mImportExportLauncher = registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),
+            result -> {
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    Intent data = result.getData();
+                    if (data == null) return;
+
+                    if (export) {
+                        try {
+                            OutputStream outputStream = this.getContentResolver().openOutputStream(data.getData());
+                            try (outputStream; ObjectOutputStream objectOutputStream = new ObjectOutputStream(outputStream)) {
+                                objectOutputStream.writeObject(remotePreferences.getString(DnsConfig.PREFERENCES_KEY, ""));
+                            } catch (IOException e) {
+                                Log.e("MainActivity", "Error serializing preferences", e);
+                            }
+                        } catch (FileNotFoundException e) {
+                            throw new RuntimeException(e);
+                        }
+                    } else {
+                        try {
+                            InputStream inputStream = this.getContentResolver().openInputStream(data.getData());
+                            if (inputStream == null) return;
+                            ObjectInputStream objectInputStream = null;
+                            Map<String, Object> map;
+                            try {
+                                objectInputStream = new ObjectInputStream(inputStream);
+                               String jsonRules = objectInputStream.readObject().toString();
+                                remotePreferences.edit().putString(DnsConfig.PREFERENCES_KEY, jsonRules).apply();
+
+                            } catch (Exception e) {
+                                Log.e("MainActivity", "Error deserializing preferences", e);
+                            } finally {
+                                objectInputStream.close();
+                                inputStream.close();
+                            }
+                        } catch (IOException e) {
+                            throw new RuntimeException(e);
+                        }
+                    }
+                }
+            });
 
     private void showThemeColorDialog() {
         SharedPreferences preferences = getSharedPreferences(
