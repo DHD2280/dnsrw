@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="Theme.DnsRw" parent="Theme.Material3.Light.NoActionBar">
-        <item name="dynamicColorThemeOverlay">@style/ThemeOverlay.Material3.DynamicColors.Light</item>
+        <item name="dynamicColorThemeOverlay">@style/ThemeOverlay.Material3Expressive.DynamicColors.Light</item>
         <item name="materialAlertDialogTheme">@style/DnsRw.AlertDialog</item>
         <item name="android:windowActionModeOverlay">true</item>
         <item name="android:windowBackground">?attr/colorSurface</item>
@@ -11,7 +11,7 @@
         <item name="android:windowLightNavigationBar">?android:attr/isLightTheme</item>
     </style>
 
-    <style name="DnsRw.AlertDialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+    <style name="DnsRw.AlertDialog" parent="ThemeOverlay.Material3Expressive.MaterialAlertDialog">
         <item name="alertDialogStyle">@style/DnsRw.DialogSurface</item>
         <item name="buttonBarButtonStyle">@style/DnsRw.DialogButton</item>
         <item name="buttonBarPositiveButtonStyle">@style/DnsRw.DialogButton</item>
