@@ -1,0 +1,82 @@
+name: Make Release
+
+
+on:
+  push:
+    tags: 'v*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Source Code Download
+        run: git clone --branch main --single-branch --recurse-submodules https://github.com/DHD2280/dnsrw.git .
+
+      - name: JDK 21 Setup
+        uses: actions/setup-java@v4.1.0
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: gradle
+
+      - name: Shell Scripts Permissions
+        run: chmod +x .github/*.sh
+
+      - name: Version Bump
+        run: .github/bumpVersion.sh
+
+      - name: Gradlew Permissions
+        run: chmod +x gradlew
+
+      - name: Signature files preparation
+        run: |
+          if [ ! -z "${{ secrets.KEYSTORE }}" ]; then
+            echo storePassword='${{ secrets.KEYSTORE_PASSWORD }}' >> keystore.properties
+            echo keyAlias='${{ secrets.KEY_ALIAS }}' >> keystore.properties
+            echo keyPassword='${{ secrets.KEY_PASSWORD }}' >> keystore.properties
+            echo storeFile='${{ github.workspace }}/key.jks' >> keystore.properties
+            echo ${{ secrets.KEYSTORE }} | base64 --decode > ${{ github.workspace }}/key.jks
+          fi
+
+      - name: Gradle Build Release
+        run: ./gradlew assembleRelease
+
+      - name: Gradle Build Debug
+        run: ./gradlew assembleDebug
+
+      - name: Upload Artifact to Actions
+        uses: actions/upload-artifact@v4.3.1
+        with:
+          name: DNSRW-Fork
+          path: app/build/outputs/apk/release/*.apk
+
+      - name: Upload Artifact to Actions
+        uses: actions/upload-artifact@v4.3.1
+        with:
+          name: DNSRW-Fork_debug
+          path: app/build/outputs/apk/debug/*.apk
+
+      - name: DNSRW-Fork Binary Release
+        uses: ncipollo/release-action@v1.14.0
+        with:
+          tag: ${{ github.ref }}
+          name: ${{ github.ref_name }}
+          prerelease: false
+          draft: false
+          bodyFile: 'releaseNotes.md'
+          artifacts: 'app/build/outputs/apk/release/*.apk,app/build/outputs/apk/debug/*.apk'
+
+      - name: Version Bump Commit
+        uses: github-actions-x/commit@v2.9
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          push-branch: 'main'
+          commit-message: 'Version update: Release'
+          force-add: 'true'
+          files: app/build.gradle.kts StableChangelog.md
+          name: GitHub
+          email: DNSRW-Fork@dhd.it
