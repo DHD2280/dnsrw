@@ -158,7 +158,7 @@ public final class MainActivity extends AppCompatActivity {
         this.export = export;
         fileIntent.setAction(export ? Intent.ACTION_CREATE_DOCUMENT : Intent.ACTION_GET_CONTENT);
         fileIntent.setType("*/*");
-        fileIntent.putExtra(Intent.EXTRA_TITLE, "OxygenCustomizer_Config" + ".bin");
+        fileIntent.putExtra(Intent.EXTRA_TITLE, "DNSRW_Config" + ".dnsrw");
         mImportExportLauncher.launch(fileIntent);
     }
 
