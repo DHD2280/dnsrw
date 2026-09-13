@@ -1,3 +1,5 @@
+**1.0.5**  
+- Added delete all Wi-Fi and SIM rules button  
 **1.0.4**  
 - Added English translations
 - Added black theme
