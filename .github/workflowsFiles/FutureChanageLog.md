@@ -1,1 +1,3 @@
--
+- Added English translations
+- Added black theme
+- Added Import/Export buttons
