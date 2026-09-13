@@ -1,3 +1,1 @@
-- Added English translations
-- Added black theme
-- Added Import/Export buttons
+- Added delete all Wi-Fi and SIM rules button
