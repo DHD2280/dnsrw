@@ -5,3 +5,6 @@
 build/
 device/
 local.properties
+keystore/
+/app/debug/
+/app/release/
