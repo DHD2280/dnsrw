@@ -14,6 +14,7 @@
     <string name="theme_color">主题</string>
     <string name="about">关于</string>
     <string name="personal_homepage">个人主页</string>
+    <string name="original_repository">原始仓库</string>
     <string name="repository">仓库地址</string>
     <string name="wifi_rules_title">无线网络重写</string>
     <string name="sim_rules_title">移动网络重写</string>
@@ -39,6 +40,7 @@
     <string name="sim_unavailable">此卡当前不可用</string>
 
     <!-- Rules -->
+    <string name="export_defaults">出口规则</string>
     <string name="rules_not_change">不更改</string>
     <string name="rules_custom">自定义</string>
     <string name="rules_wifi_default">使用无线网络默认配置</string>
@@ -50,5 +52,6 @@
     <string name="theme_indigo">靛蓝</string>
     <string name="theme_teal">青绿</string>
     <string name="theme_orange">暖橙</string>
+    <string name="import_defaults">进口规则</string>
 
 </resources>
