@@ -1,3 +1,7 @@
+import org.gradle.language.nativeplatform.internal.Dimensions.applicationVariants
+import java.io.FileInputStream
+import java.util.Properties
+
 /*
  * Copyright 2026 肖其顿 (XIAO QI DUN)
  *
@@ -31,6 +35,25 @@ android {
         versionName = "1.0.3"
     }
 
+    val keystorePropertiesFile = rootProject.file("keystore.properties")
+    var releaseSigning = signingConfigs.getByName("debug")
+
+    try {
+        val keystoreProperties = Properties()
+        FileInputStream(keystorePropertiesFile).use { inputStream ->
+            keystoreProperties.load(inputStream)
+        }
+
+        releaseSigning = signingConfigs.create("release") {
+            keyAlias = keystoreProperties.getProperty("keyAlias")
+            keyPassword = keystoreProperties.getProperty("keyPassword")
+            storeFile = rootProject.file(keystoreProperties.getProperty("storeFile"))
+            storePassword = keystoreProperties.getProperty("storePassword")
+            enableV1Signing = true
+            enableV2Signing = true
+        }
+    } catch (_: Exception) {}
+
     androidResources {
         localeFilters += listOf("zh")
     }
@@ -43,10 +66,16 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            signingConfig = signingConfigs.getByName("debug")
-            vcsInfo {
-                include = false
-            }
+            signingConfig = releaseSigning
+        }
+        debug {
+            isDebuggable = true
+            isMinifyEnabled = false
+            isShrinkResources = false
+            signingConfig = releaseSigning
+        }
+        getByName("debug") {
+            versionNameSuffix = ".debug"
         }
     }
 
@@ -71,6 +100,19 @@ android {
     lint {
         abortOnError = true
         checkReleaseBuilds = true
+    }
+}
+
+androidComponents {
+    onVariants { variant ->
+        val buildType = variant.buildType
+        val appName = "DNSRW-Fork"
+
+        variant.outputs.forEach { output ->
+            if (output is com.android.build.api.variant.impl.VariantOutputImpl) {
+                output.outputFileName.set("${appName}-${buildType}.apk")
+            }
+        }
     }
 }
 
