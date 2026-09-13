@@ -23,6 +23,8 @@
     <string name="wifi_rules_title">Wi-Fi Rewrite Rules</string>
     <string name="sim_rules_title">Mobile Network Rewrite Rules</string>
     <string name="add_wireless_rewrite">Add Wi-Fi Rewrite</string>
+    <string name="delete_all_rewrites">Delete all rewrites</string>
+    <string name="delete_all_rewrites_message">Are you sure you want to remove all the %s rewrite rules?</string>
     <string name="add_mobile_rewrite">Add Mobile Network Rewrite</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>

@@ -119,6 +119,10 @@ public final class DnsConfig {
         wifiRules.remove(ssid);
     }
 
+    public void clearWifiRules() {
+        wifiRules.clear();
+    }
+
     public void reorderWifiRules(List<String> ids) {
         reorderRules(wifiRules, ids);
     }
@@ -129,6 +133,10 @@ public final class DnsConfig {
 
     public void removeSimRule(String simId) {
         simRules.remove(simId);
+    }
+
+    public void clearSimRules() {
+        simRules.clear();
     }
 
     public void reorderSimRules(List<String> ids) {

@@ -134,7 +134,9 @@ public final class MainActivity extends AppCompatActivity {
         binding.themeButton.setOnClickListener(view -> showThemeColorDialog());
         binding.aboutButton.setOnClickListener(view -> showAboutDialog());
         binding.addWifiRule.setOnClickListener(view -> showWifiRuleDialog(null));
+        binding.deleteAllWifiRule.setOnClickListener(view -> showDeleteAllDialog(true));
         binding.addSimRule.setOnClickListener(view -> showSimPicker());
+        binding.deleteAllSimRule.setOnClickListener(view -> showDeleteAllDialog(false));
         renderRules();
     }
 
@@ -187,7 +189,7 @@ public final class MainActivity extends AppCompatActivity {
                             Map<String, Object> map;
                             try {
                                 objectInputStream = new ObjectInputStream(inputStream);
-                               String jsonRules = objectInputStream.readObject().toString();
+                                String jsonRules = objectInputStream.readObject().toString();
                                 remotePreferences.edit().putString(DnsConfig.PREFERENCES_KEY, jsonRules).apply();
 
                             } catch (Exception e) {
@@ -343,7 +345,9 @@ public final class MainActivity extends AppCompatActivity {
         binding.mobileDefaultDnsSecondary.setEnabled(enabled);
         binding.saveDefaults.setEnabled(enabled);
         binding.addWifiRule.setEnabled(enabled);
+        binding.deleteAllWifiRule.setEnabled(enabled);
         binding.addSimRule.setEnabled(enabled);
+        binding.deleteAllSimRule.setEnabled(enabled);
     }
 
     private void loadConfiguration() {
@@ -377,6 +381,8 @@ public final class MainActivity extends AppCompatActivity {
     }
 
     private void renderRules() {
+        binding.deleteAllWifiRule.setVisibility(configuration.wifiRules().size() > 1 ? View.VISIBLE : View.GONE);
+        binding.deleteAllSimRule.setVisibility(configuration.simRules().size() > 1 ? View.VISIBLE : View.GONE);
         renderRuleGroup(binding.wifiRules, wifiRuleAdapter, configuration.wifiRules(), true);
         renderRuleGroup(binding.simRules, simRuleAdapter, configuration.simRules(), false);
     }
@@ -511,6 +517,20 @@ public final class MainActivity extends AppCompatActivity {
                 .show();
     }
 
+    private void showDeleteAllDialog(boolean wifi) {
+        new MaterialAlertDialogBuilder(this)
+                .setTitle(R.string.delete_all_rewrites)
+                .setMessage(String.format(getString(R.string.delete_all_rewrites_message), wifi ? getString(R.string.wireless_network) : getString(R.string.mobile_network)))
+                .setNegativeButton(android.R.string.cancel, (dialogInterface, i) -> {
+                    dialogInterface.cancel();
+                })
+                .setPositiveButton(R.string.delete, (dialog, which) -> {
+                    if (wifi) configuration.clearWifiRules();
+                    else configuration.clearSimRules();
+                    saveConfiguration();
+                }).create().show();
+    }
+
     private void showManualWirelessRuleDialog() {
         TextInputEditText identity = new TextInputEditText(this);
         configureTextInput(identity);
@@ -558,8 +578,8 @@ public final class MainActivity extends AppCompatActivity {
         DnsConfig.Rule existing = originalId == null
                 ? null
                 : (wifi
-                ? configuration.wifiRules().get(originalId)
-                : configuration.simRules().get(originalId));
+                   ? configuration.wifiRules().get(originalId)
+                   : configuration.simRules().get(originalId));
 
         LinearLayout content = new LinearLayout(this);
         content.setOrientation(LinearLayout.VERTICAL);
