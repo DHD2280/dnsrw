@@ -227,6 +227,9 @@ public final class MainActivity extends AppCompatActivity {
         content.findViewById(R.id.personal_homepage).setOnClickListener(
                 view -> openWebPage(R.string.personal_homepage_url)
         );
+        content.findViewById(R.id.original_repository).setOnClickListener(
+                view -> openWebPage(R.string.repository_url)
+        );
         content.findViewById(R.id.repository).setOnClickListener(
                 view -> openWebPage(R.string.repository_url)
         );

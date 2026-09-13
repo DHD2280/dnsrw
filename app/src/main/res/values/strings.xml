@@ -15,9 +15,11 @@
     <string name="theme_color">Theme</string>
     <string name="about">About</string>
     <string name="personal_homepage">Personal Homepage</string>
+    <string name="original_repository">Original Repository</string>
     <string name="repository">Repository</string>
     <string name="personal_homepage_url" translatable="false">https://aite.me/</string>
     <string name="repository_url" translatable="false">https://github.com/xiaoqidun/dnsrw</string>
+    <string name="fork_url" translatable="false">https://github.com/DHD2280/dnsrw</string>
     <string name="wifi_rules_title">Wi-Fi Rewrite Rules</string>
     <string name="sim_rules_title">Mobile Network Rewrite Rules</string>
     <string name="add_wireless_rewrite">Add Wi-Fi Rewrite</string>
