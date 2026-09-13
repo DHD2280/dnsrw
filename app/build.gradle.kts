@@ -31,8 +31,8 @@ android {
         applicationId = "me.aite.dnsrw"
         minSdk = 35
         targetSdk = 37
-        versionCode = 4
-        versionName = "1.0.3"
+        versionCode = 5
+        versionName = "1.0.4"
     }
 
     val keystorePropertiesFile = rootProject.file("keystore.properties")

@@ -1,3 +1,7 @@
+**1.0.4**  
+- Added English translations
+- Added black theme
+- Added Import/Export buttons  
 **1.0.3**
 - feat(界面优化): 改善卡槽文字显示
 
