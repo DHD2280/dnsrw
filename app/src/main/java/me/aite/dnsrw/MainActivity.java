@@ -22,21 +22,17 @@ import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -46,8 +42,6 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.button.MaterialButton;
-import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.color.DynamicColors;
 import com.google.android.material.color.DynamicColorsOptions;
 import com.google.android.material.color.MaterialColors;
@@ -65,9 +59,9 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import io.github.libxposed.service.XposedService;
+import me.aite.dnsrw.databinding.ActivityMainBinding;
 
 public final class MainActivity extends AppCompatActivity {
     private static final String APPEARANCE_PREFERENCES = "appearance";
@@ -96,22 +90,8 @@ public final class MainActivity extends AppCompatActivity {
     private final SharedPreferences.OnSharedPreferenceChangeListener observationListener =
             (preferences, key) -> runOnUiThread(this::renderRules);
 
-    private TextView serviceStatus;
-    private ImageView serviceStatusIcon;
-    private MaterialCardView serviceStatusCard;
-    private EditText wifiDefaultDns;
-    private EditText wifiDefaultDnsSecondary;
-    private EditText mobileDefaultDns;
-    private EditText mobileDefaultDnsSecondary;
+    private ActivityMainBinding binding;
     private boolean export = true;
-    private MaterialButton importButton, exportButton;
-    private MaterialButton saveDefaults;
-    private MaterialButton themeButton;
-    private MaterialButton aboutButton;
-    private MaterialButton addWifiRule;
-    private MaterialButton addSimRule;
-    private RecyclerView wifiRules;
-    private RecyclerView simRules;
     private RuleAdapter wifiRuleAdapter;
     private RuleAdapter simRuleAdapter;
     private ItemTouchHelper wifiRuleTouchHelper;
@@ -124,25 +104,9 @@ public final class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         applyThemeColor();
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        setupSystemBarInsets(findViewById(R.id.screen));
-
-        serviceStatus = findViewById(R.id.service_status);
-        serviceStatusIcon = findViewById(R.id.service_status_icon);
-        serviceStatusCard = findViewById(R.id.service_status_card);
-        wifiDefaultDns = findViewById(R.id.wifi_default_dns);
-        wifiDefaultDnsSecondary = findViewById(R.id.wifi_default_dns_secondary);
-        mobileDefaultDns = findViewById(R.id.mobile_default_dns);
-        mobileDefaultDnsSecondary = findViewById(R.id.mobile_default_dns_secondary);
-        importButton = findViewById(R.id.import_defaults);
-        exportButton = findViewById(R.id.export_defaults);
-        saveDefaults = findViewById(R.id.save_defaults);
-        themeButton = findViewById(R.id.theme_button);
-        aboutButton = findViewById(R.id.about_button);
-        addWifiRule = findViewById(R.id.add_wifi_rule);
-        addSimRule = findViewById(R.id.add_sim_rule);
-        wifiRules = findViewById(R.id.wifi_rules);
-        simRules = findViewById(R.id.sim_rules);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        setupSystemBarInsets(binding.screen);
 
         wifiRuleAdapter = new RuleAdapter(
                 true,
@@ -156,21 +120,21 @@ public final class MainActivity extends AppCompatActivity {
                 item -> confirmDelete(item.id(), item.label(), false),
                 holder -> simRuleTouchHelper.startDrag(holder)
         );
-        wifiRuleTouchHelper = attachRuleTouchHelper(wifiRules, wifiRuleAdapter, true);
-        simRuleTouchHelper = attachRuleTouchHelper(simRules, simRuleAdapter, false);
+        wifiRuleTouchHelper = attachRuleTouchHelper(binding.wifiRules, wifiRuleAdapter, true);
+        simRuleTouchHelper = attachRuleTouchHelper(binding.simRules, simRuleAdapter, false);
 
-        importButton.setOnClickListener(view -> importExportSettings(false));
-        exportButton.setOnClickListener(view -> importExportSettings(true));
+        binding.importDefaults.setOnClickListener(view -> importExportSettings(false));
+        binding.exportDefaults.setOnClickListener(view -> importExportSettings(true));
 
-        saveDefaults.setOnClickListener(view -> {
+        binding.saveDefaults.setOnClickListener(view -> {
             if (captureDefaults()) {
                 saveConfiguration();
             }
         });
-        themeButton.setOnClickListener(view -> showThemeColorDialog());
-        aboutButton.setOnClickListener(view -> showAboutDialog());
-        addWifiRule.setOnClickListener(view -> showWifiRuleDialog(null));
-        addSimRule.setOnClickListener(view -> showSimPicker());
+        binding.themeButton.setOnClickListener(view -> showThemeColorDialog());
+        binding.aboutButton.setOnClickListener(view -> showAboutDialog());
+        binding.addWifiRule.setOnClickListener(view -> showWifiRuleDialog(null));
+        binding.addSimRule.setOnClickListener(view -> showSimPicker());
         renderRules();
     }
 
@@ -333,16 +297,16 @@ public final class MainActivity extends AppCompatActivity {
             int foregroundAttribute,
             int backgroundAttribute
     ) {
-        int color = MaterialColors.getColor(serviceStatus, foregroundAttribute);
-        serviceStatus.setText(text);
-        serviceStatus.setTextColor(color);
+        int color = MaterialColors.getColor(binding.serviceStatus, foregroundAttribute);
+        binding.serviceStatus.setText(text);
+        binding.serviceStatus.setTextColor(color);
         android.content.res.ColorStateList colors =
                 android.content.res.ColorStateList.valueOf(color);
-        serviceStatusIcon.setImageTintList(colors);
-        themeButton.setIconTint(colors);
-        aboutButton.setIconTint(colors);
-        serviceStatusCard.setCardBackgroundColor(
-                MaterialColors.getColor(serviceStatusCard, backgroundAttribute)
+        binding.serviceStatusIcon.setImageTintList(colors);
+        binding.themeButton.setIconTint(colors);
+        binding.aboutButton.setIconTint(colors);
+        binding.serviceStatusCard.setCardBackgroundColor(
+                MaterialColors.getColor(binding.serviceStatusCard, backgroundAttribute)
         );
     }
 
@@ -368,13 +332,13 @@ public final class MainActivity extends AppCompatActivity {
     }
 
     private void setEditingEnabled(boolean enabled) {
-        wifiDefaultDns.setEnabled(enabled);
-        wifiDefaultDnsSecondary.setEnabled(enabled);
-        mobileDefaultDns.setEnabled(enabled);
-        mobileDefaultDnsSecondary.setEnabled(enabled);
-        saveDefaults.setEnabled(enabled);
-        addWifiRule.setEnabled(enabled);
-        addSimRule.setEnabled(enabled);
+        binding.wifiDefaultDns.setEnabled(enabled);
+        binding.wifiDefaultDnsSecondary.setEnabled(enabled);
+        binding.mobileDefaultDns.setEnabled(enabled);
+        binding.mobileDefaultDnsSecondary.setEnabled(enabled);
+        binding.saveDefaults.setEnabled(enabled);
+        binding.addWifiRule.setEnabled(enabled);
+        binding.addSimRule.setEnabled(enabled);
     }
 
     private void loadConfiguration() {
@@ -384,14 +348,14 @@ public final class MainActivity extends AppCompatActivity {
         configuration = DnsConfig.fromJson(
                 remotePreferences.getString(DnsConfig.PREFERENCES_KEY, "")
         );
-        setDnsPair(configuration.wifiDefault(), wifiDefaultDns, wifiDefaultDnsSecondary);
-        setDnsPair(configuration.mobileDefault(), mobileDefaultDns, mobileDefaultDnsSecondary);
+        setDnsPair(configuration.wifiDefault(), binding.wifiDefaultDns, binding.wifiDefaultDnsSecondary);
+        setDnsPair(configuration.mobileDefault(), binding.mobileDefaultDns, binding.mobileDefaultDnsSecondary);
         renderRules();
     }
 
     private boolean captureDefaults() {
-        List<String> wireless = readDnsPair(wifiDefaultDns, wifiDefaultDnsSecondary);
-        List<String> mobile = readDnsPair(mobileDefaultDns, mobileDefaultDnsSecondary);
+        List<String> wireless = readDnsPair(binding.wifiDefaultDns, binding.wifiDefaultDnsSecondary);
+        List<String> mobile = readDnsPair(binding.mobileDefaultDns, binding.mobileDefaultDnsSecondary);
         if (wireless == null || mobile == null) {
             return false;
         }
@@ -408,8 +372,8 @@ public final class MainActivity extends AppCompatActivity {
     }
 
     private void renderRules() {
-        renderRuleGroup(wifiRules, wifiRuleAdapter, configuration.wifiRules(), true);
-        renderRuleGroup(simRules, simRuleAdapter, configuration.simRules(), false);
+        renderRuleGroup(binding.wifiRules, wifiRuleAdapter, configuration.wifiRules(), true);
+        renderRuleGroup(binding.simRules, simRuleAdapter, configuration.simRules(), false);
     }
 
     private void renderRuleGroup(
