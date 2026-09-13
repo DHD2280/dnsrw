@@ -335,6 +335,8 @@ public final class MainActivity extends AppCompatActivity {
     }
 
     private void setEditingEnabled(boolean enabled) {
+        binding.importDefaults.setEnabled(enabled);
+        binding.exportDefaults.setEnabled(enabled);
         binding.wifiDefaultDns.setEnabled(enabled);
         binding.wifiDefaultDnsSecondary.setEnabled(enabled);
         binding.mobileDefaultDns.setEnabled(enabled);
